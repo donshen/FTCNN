@@ -1,15 +1,8 @@
-import os
-import h5py
 import numpy as np
 import matplotlib.pyplot as plt
 from plotly.graph_objs import *
 import plotly.graph_objects as go
-from tqdm import tqdm
-from sklearn.model_selection import train_test_split
-from scipy.special import softmax
 from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import confusion_matrix
-
 
 def map_coord_from_pts(filename, res):
     # Initialize 3D matrix with shape of (res, res, res)
@@ -27,15 +20,11 @@ def map_coord_from_pts(filename, res):
             index_y = int(coord[i, 1] * res)
             index_z = int(coord[i, 2] * res)
 
-            if index_x >= res:
-                index_x -= res
-            if index_y >= res:
-                index_y -= res
-            if index_z >= res:
-                index_z -= res
+            if index_x >= res: index_x -= res
+            if index_y >= res: index_y -= res
+            if index_z >= res: index_z -= res
                 
             sim_box[index_x, index_y, index_z] += 1
-            
     return sim_box, coord
 
 def normalize_pts(X):
@@ -45,15 +34,13 @@ def normalize_pts(X):
     X_scaled = (X - X_min) / (X_max - X_min)
     return X_scaled
 
-
 def standardize_pts(X):
     scaler = StandardScaler()
     X = np.array(X, dtype=np.float32)
     X = scaler.fit_transform(X.reshape(-1, X.shape[-1])).reshape(X.shape)
     return X
 
-
-def plot_FT(FT_shifted):   
+def plot_FT(FT_shifted):
     fig, axs = plt.subplots(1,3,figsize = (10, 30))
     fig.subplots_adjust(hspace =.1, wspace=.0)
     axs = axs.ravel()
@@ -72,12 +59,9 @@ def FT_calc(sim_box, keep=1):
     FT_low = FT * ind
     FT_shifted = np.abs(np.fft.fftshift(FT_low))
     return FT_shifted
-
-
     
-def display_minority(pos):
-    x, y, z = pos[:, 0], pos[:, 1], pos[:, 2]
-    
+def display_minority(coord):
+    x, y, z = coord[:, 0], coord[:, 1], coord[:, 2]
     fig = go.Figure(data =[go.Scatter3d(x = x,
                                        y = y,
                                        z = z,

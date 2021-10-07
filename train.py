@@ -10,11 +10,21 @@ from torch.optim import *
 from cnnmodel.model import CNNModel
 
 parser = argparse.ArgumentParser()
-parser.add_argument(
-    '--proc_path', type=str, help='path that contain preprocessed training and test data splitted from FT and shifted voxilized point clouds, in .h5 format')
-parser.add_argument('--save_path', type=str, help='path that the trained CNN model is trained')
-parser.add_argument('-n', '--num_epochs', type=int, default=100, help='number of epochs to train')
-parser.add_argument('-b', '--batch_size', type=int, default=128)
+parser.add_argument('--proc_path',
+                    type=str,
+                    help='path that contain preprocessed training and test data splitted from FT and shifted voxilized point clouds, in .h5 format')
+parser.add_argument('--save_path',
+                    type=str,
+                    help='path that the trained CNN model is trained')
+parser.add_argument('-n',
+                    '--num_epochs',
+                    type=int,
+                    default=100,
+                    help='number of epochs to train')
+parser.add_argument('-b',
+                    '--batch_size',
+                    type=int,
+                    default=128)
 opt = parser.parse_args()
 
 # Select device
@@ -49,7 +59,6 @@ test = torch.utils.data.TensorDataset(test_x,test_y)
 # data loader
 train_loader = torch.utils.data.DataLoader(train, batch_size = opt.batch_size, shuffle = True)
 test_loader = torch.utils.data.DataLoader(test, batch_size = opt.batch_size, shuffle = True)
-
 
 #Definition of hyperparameters
 n_iters = (len(train_x) / opt.batch_size) * opt.num_epochs

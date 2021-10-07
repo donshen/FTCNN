@@ -4,15 +4,13 @@ from torch.autograd import Variable
 from utils import *
 import matplotlib.pyplot as plt
 from plotly.graph_objs import *
-import plotly.graph_objects as go
 from scipy.special import softmax
-from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import confusion_matrix
 
 class Inferer:
     def __init__(self, res=16):
         with open('struct_id.json') as fh:
-            self.label_dict  = json.load(fh)
+            self.label_dict = json.load(fh)
         self.res = res
         
     def preproc(self, x, y, res):
