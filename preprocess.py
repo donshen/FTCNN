@@ -1,3 +1,4 @@
+import os
 import json
 import h5py
 import argparse
@@ -8,7 +9,7 @@ from utils import *
 parser = argparse.ArgumentParser()
 parser.add_argument('--raw_path',
                     type=str,
-                    default='/mnt/ssd1/donny/test_pn/pointnet.pytorch/point_clouds/',
+                    default='point_clouds/',
                     help='path that contain {phase}/points/*.pts files')
 parser.add_argument('--proc_path',
                     type=str,
@@ -29,7 +30,7 @@ opt = parser.parse_args()
 with open('struct_id.json') as fh:
     label_dict = json.load(fh)
     
-dirs = {phase: os.path.join(opt.raw_path, phase, 'points') for phase in label_dict}
+dirs = {phase: os.path.join(opt.raw_path, phase) for phase in label_dict}
 
 data = []
 data_labels = []

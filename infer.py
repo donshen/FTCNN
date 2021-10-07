@@ -1,5 +1,7 @@
+import os
 import json
 import torch
+from tqdm import tqdm
 from torch.autograd import Variable
 from utils import *
 import matplotlib.pyplot as plt
@@ -20,7 +22,7 @@ class Inferer:
         y_proc = torch.from_numpy(np.array(y)).long()
         return x_proc, y_proc
 
-    def prep_data_loader(self, x, y, res, shuffle=True):
+    def prep_data_loader(self, x, y, res, shuffle=False):
         x, y = self.preproc(x, y, res)
         data = torch.utils.data.TensorDataset(x, y)
         dataloader = torch.utils.data.DataLoader(data, batch_size = len(data), shuffle=shuffle)
@@ -30,10 +32,13 @@ class Inferer:
         X = []
         y = []
         pts_file_list = os.listdir(path)
+        pts_file_list= [file for file in pts_file_list if file[-3:] == 'pts']
+        def get_key(file):
+            return int(file.split('_')[-1][:-4])
+        
+        pts_file_list = sorted(pts_file_list, key=get_key)
         for i in tqdm(range(len(pts_file_list))):
             pts_file = pts_file_list[i]
-            if pts_file[-3:] != 'pts':
-                continue
             pts_file = os.path.join(path, pts_file)
             sim_box, _ = map_coord_from_pts(pts_file, self.res)
             FT_shifted = FT_calc(sim_box)
