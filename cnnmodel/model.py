@@ -31,7 +31,7 @@ class CNNModel(nn.Module):
         # print(x.size())
         x = self.conv_layer2(x)
         # print(x.size())
-        x = x.view(out.size(0), -1)
+        x = x.view(x.size(0), -1)
         x = self.fc1(x)
         x = self.relu(x)
         x = self.batch(x)
