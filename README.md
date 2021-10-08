@@ -1,7 +1,7 @@
 # FTCNN
 
 ## § Introduction
-This project utilizes a simple 3D-CNN for accurately detect morphologies of self-assembling amphiphilic molecules formed in molecular simulations. First, Point clouds generated from simulation frames are voxelized into occupancy grids. Then discrete Fourier transformation (DFT) is implemented on the voxels using FFT algorithm as input data. It is advantageous over the PointNet from the earlier paper "[Development of a PointNet for Detecting Morphologies of Self-Assembled Block Oligomers in Atomistic Simulations](https://doi.org/10.1021/acs.jpcb.1c02389)" in three ways:
+This project utilizes a simple 3D-CNN for accurate morphology detection of self-assembling amphiphilic molecules formed in molecular simulations. First, Point clouds generated from simulation frames are voxelized into occupancy grids. Then discrete Fourier transformation (DFT) is implemented on the voxels using FFT algorithm to obtain input data. FTCNN is advantageous over the PointNet implementation from the earlier paper "[Development of a PointNet for Detecting Morphologies of Self-Assembled Block Oligomers in Atomistic Simulations](https://doi.org/10.1021/acs.jpcb.1c02389)" in three ways:
  - Much simpler model architecture, and much less parameters
  - Translational invariance is built in by definition of Fourier transform
  - Not restricted by the system size (number of points per point cloud) and characteristic dimension of the morphology (domain spacing / box dimension)
