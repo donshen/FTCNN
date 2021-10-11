@@ -69,7 +69,7 @@ model = CNNModel().to(device)
 print(model)
 
 # Cross Entropy Loss 
-error = nn.CrossEntropyLoss()
+loss_fn = nn.CrossEntropyLoss()
 
 # Adam
 learning_rate = 0.001
@@ -92,7 +92,7 @@ for epoch in tqdm(range(opt.num_epochs)):
         # Forward propagation
         outputs = model(train)
         # Calculate softmax and ross entropy loss
-        loss = error(outputs, voxel_labels)
+        loss = loss_fn(outputs, voxel_labels)
         # Calculating gradients
         loss.backward()
         # Update parameters
