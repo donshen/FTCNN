@@ -54,7 +54,7 @@ class Inferer:
         for i, (X, y_true) in enumerate(infer_loader):      
             infer_data = Variable(X.view(len(X), 1, self.res, self.res, self.res))
             # Forward propagation
-            outputs = model(infer_data)
+            outputs = model.to('cpu')(infer_data)
             # Get predictions from the maximum value
             y_pred = torch.max(outputs.data, 1)[1]
             acc = (y_pred == y_true).sum() / len(y_pred)

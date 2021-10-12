@@ -99,7 +99,7 @@ for epoch in tqdm(range(opt.num_epochs)):
         optimizer.step()
         
         count += 1
-        if count % 10 == 0:
+        if count % 1000 == 0:
             # Calculate Accuracy         
             correct = 0
             total = 0
