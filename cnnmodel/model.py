@@ -14,12 +14,12 @@ class CNNModel(nn.Module):
         self.fc1 = nn.Linear(2 ** 3 * 64, 128)
         self.fc2 = nn.Linear(128, num_classes)
         self.relu = nn.LeakyReLU()
+        self.drop=nn.Dropout(p=0.15) 
         self.batch=nn.BatchNorm1d(128)
-        self.drop=nn.Dropout(p=0.15)        
         
-    def _conv_layer(self, in_c, out_c):
+    def _conv_layer(self, in_channels, out_channels):
         conv_layer = nn.Sequential(
-            nn.Conv3d(in_c, out_c, kernel_size=(3, 3, 3), padding=0),
+            nn.Conv3d(in_channels, out_channels, kernel_size=(3, 3, 3), padding=0),
             nn.LeakyReLU(),
             nn.MaxPool3d((2, 2, 2)),
         )
