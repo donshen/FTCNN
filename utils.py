@@ -27,12 +27,20 @@ def map_coord_from_pts(filename, res):
             sim_box[index_x, index_y, index_z] += 1
     return sim_box, coord
 
+# def normalize_pts(X):
+#     # Min_max scaling
+#     X = np.array(X, dtype=np.float32)
+#     X_min, X_max = np.min(X), np.max(X)
+#     X_scaled = (X - X_min) / (X_max - X_min)
+#     return X_scaled
+
 def normalize_pts(X):
-    # Min_max scaling
+    # Min_max scaling in all three dimensions, resulting coordinates have a unit cubic boundary
     X = np.array(X, dtype=np.float32)
-    X_min, X_max = np.min(X), np.max(X)
-    X_scaled = (X - X_min) / (X_max - X_min)
-    return X_scaled
+    for i in range(3):
+        X_min_i, X_max_i = np.min(X[:, i]), np.max(X[:, i])
+        X[:, i] = (X[:, i] - X_min_i) / (X_max_i - X_min_i)   
+    return X
 
 def standardize_pts(X):
     scaler = StandardScaler()
