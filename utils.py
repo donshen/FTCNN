@@ -4,7 +4,7 @@ from plotly.graph_objs import *
 import plotly.graph_objects as go
 from sklearn.preprocessing import StandardScaler
 
-def map_coord_from_pts(filename, res):
+def map_coord_from_pts(filename, res, fit=False):
     # Initialize 3D matrix with shape of (res, res, res)
     sim_box = np.zeros((res, res, res))
     # Read input
@@ -13,7 +13,10 @@ def map_coord_from_pts(filename, res):
         # Read box size
         
         coord = [[float(i) for i in line.split()] for line in lines]
-        coord = normalize_pts(coord)
+        if fit:
+            coord = normalize_pts_fit(coord)
+        else:
+            coord = normalize_pts(coord)
         
         for i in range(coord.shape[0]):
             index_x = int(coord[i, 0] * res)
@@ -27,14 +30,14 @@ def map_coord_from_pts(filename, res):
             sim_box[index_x, index_y, index_z] += 1
     return sim_box, coord
 
-# def normalize_pts(X):
-#     # Min_max scaling
-#     X = np.array(X, dtype=np.float32)
-#     X_min, X_max = np.min(X), np.max(X)
-#     X_scaled = (X - X_min) / (X_max - X_min)
-#     return X_scaled
-
 def normalize_pts(X):
+    # Min_max scaling
+    X = np.array(X, dtype=np.float32)
+    X_min, X_max = np.min(X), np.max(X)
+    X_scaled = (X - X_min) / (X_max - X_min)
+    return X_scaled
+
+def normalize_pts_fit(X):
     # Min_max scaling in all three dimensions, resulting coordinates have a unit cubic boundary
     X = np.array(X, dtype=np.float32)
     for i in range(3):

@@ -5,7 +5,7 @@ from tqdm import tqdm
 import torch
 from torch.autograd import Variable
 import torch.nn as nn
-import torch.nn.functional as F
+import torch.optim as optim
 from torch.optim import *
 from cnnmodel.model import CNNModel
 
@@ -72,8 +72,9 @@ print(model)
 loss_fn = nn.CrossEntropyLoss()
 
 # Adam
-learning_rate = 0.001
+learning_rate = 0.0001
 optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate, betas=(0.9, 0.999))
+scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=20, gamma=0.5)
 
 # Train
 count = 0
@@ -81,6 +82,7 @@ loss_list = []
 iteration_list = []
 accuracy_list = []
 for epoch in tqdm(range(opt.num_epochs)):
+    scheduler.step()
     for i, (voxels, voxel_labels) in enumerate(train_loader):
         voxels, voxel_labels = voxels.to(device), voxel_labels.to(device)
         if voxels.shape[0] != opt.batch_size:
@@ -99,7 +101,7 @@ for epoch in tqdm(range(opt.num_epochs)):
         optimizer.step()
         
         count += 1
-        if count % 1000 == 0:
+        if count % 100 == 0:
             # Calculate Accuracy         
             correct = 0
             total = 0
@@ -128,6 +130,7 @@ for epoch in tqdm(range(opt.num_epochs)):
             # Print Loss
             print(f'Iteration: {count}  Loss: {loss.data}  Accuracy: {accuracy}')
      
-# Save the trained model
-torch.save(model, opt.save_path)
-print(f'Model saved to {opt.save_path}.')
+    # Save the trained model
+    if epoch % 100 == 0:
+        torch.save(model, opt.save_path + '/' + str(epoch) + '.pth')
+        print(f'Model saved to {opt.save_path}.')

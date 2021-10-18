@@ -37,8 +37,7 @@ class Inferer:
             return int(file.split('_')[-1][:-4])
         
         pts_file_list = sorted(pts_file_list, key=get_key)
-        for i in tqdm(range(len(pts_file_list))):
-            pts_file = pts_file_list[i]
+        for pts_file in tqdm(pts_file_list):
             pts_file = os.path.join(path, pts_file)
             sim_box, _ = map_coord_from_pts(pts_file, self.res)
             FT_shifted = FT_calc(sim_box)

@@ -43,7 +43,6 @@ for phase in dirs:
         try: 
             sim_box, _ = map_coord_from_pts(pts_file, opt.resolution)
             FT_shifted = FT_calc(sim_box)
-            FT_shifted = normalize_pts(FT_shifted)
             data.append(FT_shifted)
             data_labels.append(label_dict[phase])
         except UnicodeDecodeError:
