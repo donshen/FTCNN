@@ -73,6 +73,9 @@ n_iters = (len(train) / opt.batch_size) * opt.num_epochs
 model = CNNModel().to(device)
 #model.cuda()
 print(model)
+n_total_params = sum(p.numel() for p in model.parameters())
+n_trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+print(f'number of parameters: {n_total_params}; number of trainable parameters: {n_trainable_params}')
 
 # Cross Entropy Loss 
 loss_fn = nn.CrossEntropyLoss()
