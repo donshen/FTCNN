@@ -1,5 +1,8 @@
 import numpy as np
+import itertools
+from copy import deepcopy
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D  
 from plotly.graph_objs import *
 import plotly.graph_objects as go
 from sklearn.preprocessing import StandardScaler
@@ -90,3 +93,50 @@ def display_minority(coord):
                       scene_camera_projection=dict(type='orthographic'),
                       margin=dict(l=0, r=0, t=0, b=0))
     fig.show()
+    
+    
+class VisUnwrapClusters:   
+    def __call__(self, voxel):
+        self.voxel = voxel
+        cluster_2 = self.find_clusters() 
+        ax = plt.figure(figsize=(8,8)).add_subplot(projection='3d')
+        ax.voxels(self.voxel, facecolor='deepskyblue', alpha = 0.6, edgecolors='midnightblue')
+        ax.voxels(cluster_2, facecolor='tomato', alpha = 0.6, edgecolors='maroon')
+        ax.axis('off')
+        plt.show()
+           
+    def is_out_of_bound(self, i, j, k):
+        L1, L2, L3 = len(self.voxel), len(self.voxel[0]), len(self.voxel[0][0])
+        return (i < 0 or i >= L1) or (j < 0 or j >= L2) or (k < 0 or k >= L3) 
+
+    def dfs(self, i, j, k):
+        # Check if current position is out-of-boundary, or has been visited, or is empty.
+        if self.is_out_of_bound(i, j, k) or self.voxel[i][j][k] == 0:
+            return
+        # Mark as visited
+        self.voxel[i][j][k] = 0
+        # Get neighbor indexes (26 directions)
+        dirs = (p for p in itertools.product([-1,0,1], repeat=3) if any(p))
+        # Recurse through all neighbors
+        for di, dj, dk in dirs:
+            self.dfs(i+di, j+dj, k+dk)       
+
+    def find_clusters(self):
+        # Return two cluster for structurs such as double gyroid
+        count = 0
+        voxel_prev = deepcopy(self.voxel)
+        if isinstance(self.voxel, np.ndarray): 
+            self.voxel = self.voxel.tolist() 
+
+        for i in range(len(self.voxel)):
+            for j in range(len(self.voxel[0])):
+                for k in range(len(self.voxel[0][0])):
+                    if self.voxel[i][j][k] and count < 1:
+                        count += 1
+                        self.dfs(i, j, k)
+                    else:
+                        break
+        self.voxel = np.array(self.voxel, dtype=int)
+        voxel_rec = (self.voxel != voxel_prev) * 1  
+        vexel_rec = np.array(voxel_rec) 
+        return voxel_rec
