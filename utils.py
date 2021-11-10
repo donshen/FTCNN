@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D  
 from plotly.graph_objs import *
 import plotly.graph_objects as go
+from itertools import product
 from sklearn.preprocessing import StandardScaler
 
 def map_coord_from_pts(filename, res, fit=False):
@@ -73,7 +74,32 @@ def FT_calc(sim_box, keep=1):
     FT_low = FT * ind
     FT_shifted = np.abs(np.fft.fftshift(FT_low))
     return FT_shifted
+
+def get_bounding_box(L):
+    # Get the bounding box of the N*3 coordinates for display
+    rx, ry, rz = [0, L[0]], [0, L[1]], [0, L[2]]
+    ZZ = np.asarray(list(product(rx, ry, rz)))
+    pairs = [(0,2), (2,3), (3,1), (1,0),
+             (0,1), (1,5), (5,4), (4,0),
+             (1,3), (3,7), (7,5), (5,1),
+             (2,6), (6,7), (7,3), (3,2),
+             (0,2), (2,6), (6,4), (4,0),
+             (0,4), (4,5), (5,1), (1,0)]
     
+    Zx, Zy, Zz = ZZ[:,0], ZZ[:,1], ZZ[:,2]
+    x_lines, y_lines, z_lines = [], [], []
+
+    #create the coordinate list for the lines
+    for p in pairs:
+        for i in range(len(p)):
+            x_lines.append(Zx[p[i]])
+            y_lines.append(Zy[p[i]])
+            z_lines.append(Zz[p[i]])
+        x_lines.append(None)
+        y_lines.append(None)
+        z_lines.append(None)
+    return x_lines, y_lines, z_lines
+
 def display_minority(coord):
     x, y, z = coord[:, 0], coord[:, 1], coord[:, 2]
     fig = go.Figure(data =[go.Scatter3d(x = x,
@@ -92,6 +118,13 @@ def display_minority(coord):
                       showlegend=False,
                       scene_camera_projection=dict(type='orthographic'),
                       margin=dict(l=0, r=0, t=0, b=0))
+    
+    fig.add_trace(go.Scatter3d(x=get_bounding_box(np.max(coord, 0))[0],
+                           y=get_bounding_box(np.max(coord, 0))[1],
+                           z=get_bounding_box(np.max(coord, 0))[2],
+                           mode='lines',
+                           name='lines',
+                           line=dict(width=3,color='black')))
     fig.show()
     
     
