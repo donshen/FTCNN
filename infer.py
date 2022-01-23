@@ -64,13 +64,13 @@ class Inferer:
     
     def plot_softmax_scores(self, scores):    
         x = np.arange(1, len(scores) + 1) 
-        fig, ax = plt.subplots(1,figsize=(6.5, 4))
-        labels = {phase: val+1 for phase, val in self.label_dict.items()}
-        ax.stackplot(x, scores[:,0], scores[:,1], scores[:,2], 
-                     scores[:,3], scores[:,4], scores[:,5], scores[:,6], scores[:,7], scores[:,8], alpha = 0.88)
-        ax.legend(labels,bbox_to_anchor=(1.31, 1.03), fontsize = 16)
-        ax.tick_params(direction='in',width = 1)
+        fig, ax = plt.subplots(1, figsize=(6.5, 4))
+        labels = {phase: val + 1 for phase, val in self.label_dict.items()}
+        scores_plot = [scores[:, i] for i in range(len(self.label_dict))]
+        ax.stackplot(x, *scores_plot, alpha = 0.88)
+        ax.legend(labels,bbox_to_anchor=(1.31, 1.03), fontsize=16)
+        ax.tick_params(direction='in', width=1, labelsize=16)
         ax.set_ylim([0, 1])
-        ax.set_xlabel('Frame Index')
-        ax.set_ylabel('Softmax Probability')
+        ax.set_xlabel('Frame Index', fontsize=16)
+        ax.set_ylabel('Softmax Probability', fontsize=16)
         plt.show()
