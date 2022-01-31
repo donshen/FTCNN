@@ -127,6 +127,11 @@ def display_minority(coord):
                            line=dict(width=3,color='black')))
     fig.show()
     
+
+def show_slice(array):
+    # show heatmap of a 2-D array
+    fig, ax = plt.subplots(figsize=(5,5))
+    im_region = ax.imshow(array)
     
 class VisUnwrapClusters:   
     def __call__(self, voxel):

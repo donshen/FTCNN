@@ -83,7 +83,7 @@ loss_fn = nn.CrossEntropyLoss()
 # Adam
 learning_rate = 0.001
 optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate, betas=(0.9, 0.999))
-scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=200, gamma=0.5)
+#scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=2000, gamma=0.5)
 
 # Train
 count = 0
@@ -91,7 +91,7 @@ loss_list = []
 iteration_list = []
 accuracy_list = []
 for epoch in tqdm(range(opt.num_epochs)):
-    scheduler.step()
+    #scheduler.step()
     for i, (voxels, voxel_labels) in enumerate(train_loader):
         res_x, res_y, res_z = voxels.shape[-3:]
         voxels, voxel_labels = voxels.to(device), voxel_labels.to(device)
