@@ -26,6 +26,11 @@ This project utilizes a simple 3D-CNN for accurate morphology detection of self-
 Available soon.
 
 ## § Usage
+Install packages:
+  ```sh
+  pip install -r requirements.txt 
+  ```
+
 To preprocess:
 
   ```sh
