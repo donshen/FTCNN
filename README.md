@@ -53,3 +53,16 @@ Contributions are what make the open source community such an amazing place to b
 
 Project Link: [https://github.com/donshen/FTCNN](https://github.com/donshen/FTCNN)
 
+## § Citation
+```
+@article{shen2022stabilizing,
+  author={Shen, Z. and Luo, K. and Park, S. J. and Li, D. and Mahanthappa, M. K. and Bates, F. S. and Dorfman, K. D. and Lodge, T. P. and Siepmann, J. I.},
+  title={Stabilizing a double gyroid network phase with 2 nm feature size by blending of lamellar and cylindrical forming block oligomers}, 
+  journal={JACS Au},
+  year={2022},
+  volume={2},
+  number={6},
+  pages={1405-1416},
+  doi={10.1021/jacsau.2c00101}
+}
+```
